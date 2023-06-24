@@ -7,7 +7,7 @@ namespace TaskManagement.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class TaskController : ControllerBase
+    public class TaskController : Controller
     {
         private readonly TaskContext _taskContext;
         public TaskController(TaskContext taskContext)
@@ -21,10 +21,11 @@ namespace TaskManagement.Controllers
         //}
         // GET: api/task
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<TaskModel>>> GetTasks()
+        public async Task<ActionResult> Index()
         {
             var tasks = await _taskContext.Tasks.ToListAsync();
-            return Ok(tasks);
+            return View(tasks);
+            //return Ok(tasks);
         }
         // GET: api/task/{id}
         [HttpGet("{id}")]
