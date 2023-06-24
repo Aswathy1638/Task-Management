@@ -9,12 +9,12 @@ namespace TaskManagement.Data
         {
 
         }
-        public DbSet<TaskManagement.Models.Task> Tasks { get; set; } = null!;
+        public DbSet<TaskManagement.Models.TaskModel> Tasks { get; set; } = null!;
         public DbSet<User> Users { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
 
-            modelBuilder.Entity<TaskManagement.Models.Task>().ToTable("Tasks");
+            modelBuilder.Entity<TaskManagement.Models.TaskModel>().ToTable("Tasks");
 
         }
     }
