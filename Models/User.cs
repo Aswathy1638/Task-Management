@@ -16,7 +16,7 @@ namespace TaskManagement.Models
         [Required]
         [MinLength(6)]
         public string Password { get; set; }
-        public ICollection<Task>? Tasks { get; set; }
+        public ICollection<TaskModel>? Tasks { get; set; }
         public ICollection<Comment>? Comments { get; set; }
         //public ICollection<Notification> Notifications { get; set; }
     }
