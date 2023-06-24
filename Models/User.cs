@@ -1,10 +1,23 @@
-﻿namespace TaskManagement.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace TaskManagement.Models
 {
     public class User
     {
+        [Key]
+        public int Id { get; set; }
+
+        [Required]
         public string FullName { get; set; }
-        public ICollection<Task> Tasks { get; set; }
-        public ICollection<Comment> Comments { get; set; }
+
+        [Required]
+        public string Email { get; set; }
+
+        [Required]
+        [MinLength(6)]
+        public string Password { get; set; }
+        public ICollection<Task>? Tasks { get; set; }
+        public ICollection<Comment>? Comments { get; set; }
         //public ICollection<Notification> Notifications { get; set; }
     }
 }
