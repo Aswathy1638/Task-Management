@@ -78,7 +78,7 @@ namespace TaskManagement.Controllers
           
                 
 
-                   // task.AssignedUser = await _taskContext.Users.FindAsync(task.AssignedUserId);
+                   task.User = await _taskContext.Users.FindAsync(task.UserId);
                     await _taskContext.Tasks.AddAsync(task);
                     await _taskContext.SaveChangesAsync();
                     return RedirectToAction(nameof(Index));
@@ -97,6 +97,10 @@ namespace TaskManagement.Controllers
             {
                 return NotFound();
             }
+
+            // Get the list of users for the dropdown
+            var users = _taskContext.Users.ToList();
+            ViewBag.Users = new SelectList(users, "Id", "FullName", task.UserId); // Set the selected value
 
             return View(task);
         }
@@ -125,6 +129,8 @@ namespace TaskManagement.Controllers
                     throw;
                 }
             }
+
+
             return RedirectToAction(nameof(Index));
         }
 
