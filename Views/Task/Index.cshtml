@@ -1,5 +1,6 @@
 ﻿@model IEnumerable<TaskManagement.Models.TaskModel>;
 @using TaskManagement.Models
+@inject  TaskManagement.Data.TaskContext _context  // Inject the TaskContext
 @{
     ViewData["Title"] = "Tasks";
 }
@@ -34,6 +35,9 @@
             <th>
                 @Html.DisplayNameFor(model => model.Priority)
             </th>
+            <th>
+              Assigned To  <!-- Display user name -->
+            </th>
             <th></th>
         </tr>
     </thead>
@@ -55,6 +59,18 @@
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Priority)
+                </td>
+                <td>
+                   
+                     
+                    @{
+                        var user = _context.Users.FirstOrDefault(u => u.Id == item.UserId);
+                        if (user != null)
+                        {
+                            @Html.DisplayFor(modelItem => user.FullName)
+                        }
+                    }
+                    
                 </td>
                 <td>
                     <a asp-controller="Task" asp-action="Edit" asp-route-id="@item.Id">Edit</a> |

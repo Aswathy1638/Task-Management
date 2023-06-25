@@ -78,7 +78,7 @@ namespace TaskManagement.Controllers
           
                 
 
-                   // task.AssignedUser = await _taskContext.Users.FindAsync(task.AssignedUserId);
+                   task.User = await _taskContext.Users.FindAsync(task.UserId);
                     await _taskContext.Tasks.AddAsync(task);
                     await _taskContext.SaveChangesAsync();
                     return RedirectToAction(nameof(Index));
