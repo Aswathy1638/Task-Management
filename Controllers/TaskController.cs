@@ -98,6 +98,10 @@ namespace TaskManagement.Controllers
                 return NotFound();
             }
 
+            // Get the list of users for the dropdown
+            var users = _taskContext.Users.ToList();
+            ViewBag.Users = new SelectList(users, "Id", "FullName", task.UserId); // Set the selected value
+
             return View(task);
         }
 
@@ -125,6 +129,8 @@ namespace TaskManagement.Controllers
                     throw;
                 }
             }
+
+
             return RedirectToAction(nameof(Index));
         }
 
