@@ -44,14 +44,17 @@ namespace TaskManagement
 
             app.UseAuthorization();
 
-            app.MapControllerRoute(
-                name: "default",
-                pattern: "{controller=Task}/{action=Index}/{id?}");
-            app.MapControllerRoute(
-    name: "register",
-    pattern: "register",
-    defaults: new { controller = "User", action = "Register" });
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllerRoute(
+                    name: "Login",
+                    pattern: "/login",
+                    defaults: new { controller = "User", action = "Login" });
 
+                endpoints.MapControllerRoute(
+                    name: "default",
+                    pattern: "{controller=Task}/{action=Index}/{id?}");
+            });
 
             app.Run();
         }

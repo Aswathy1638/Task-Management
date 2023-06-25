@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using System.Net;
+using System.Net.Mail;
 using TaskManagement.Data;
 using TaskManagement.Models;
 
@@ -74,19 +76,18 @@ namespace TaskManagement.Controllers
         }
         //POST: Task/Create
         [HttpPost]
-        public async Task<IActionResult> Create(TaskModel task){
-          
-                
+        public async Task<IActionResult> Create(TaskModel task)
+        {
+            task.User = await _taskContext.Users.FindAsync(task.UserId);
+            await _taskContext.Tasks.AddAsync(task);
+            await _taskContext.SaveChangesAsync();
 
-                   task.User = await _taskContext.Users.FindAsync(task.UserId);
-                    await _taskContext.Tasks.AddAsync(task);
-                    await _taskContext.SaveChangesAsync();
-                    return RedirectToAction(nameof(Index));
-                
+            var userDetails = _taskContext.Users.Find(task.UserId);
 
-            
+            string body = "New Task has been added. Please Check Index board";
+            Email(userDetails.Email, body);
+            return RedirectToAction(nameof(Index));
 
-            return View(task);
         }
 
         //GET: Task/Edit/{id}
@@ -129,7 +130,11 @@ namespace TaskManagement.Controllers
                     throw;
                 }
             }
+            var userDetails = _taskContext.Users.Find(task.UserId);
 
+            string body = "Your task has beed updated. Please Check Index board";
+
+            Email(userDetails.Email, body);
 
             return RedirectToAction(nameof(Index));
         }
@@ -162,20 +167,47 @@ namespace TaskManagement.Controllers
         [HttpGet]
         public async Task<ActionResult> Search(string searchTerm, string sortOrder)
         {
-            if(searchTerm != null)
-            {
                 if(string.IsNullOrWhiteSpace(searchTerm))
                 {
                     return View();
                 }
                 var task1 = _taskContext.Tasks.Where(item => item.Title.Contains(searchTerm)).ToList();
                 return View(task1);
-            } 
-            else
+        }
+
+        [HttpGet]
+        public IActionResult Email(string email, string Body)
+        {
+            string recipient = email;
+            string subject = "Task";
+            string body = Body;
+
+            SendEmail(recipient, subject, body);
+
+            return Ok();
+        }
+
+        public void SendEmail(string recipient, string subject, string body)
+        {
+            var smtpClient = new SmtpClient("smtp.gmail.com")
             {
-                var task = _taskContext.Tasks.OrderByDescending(item => item.Priority).ToList();
-                return View(task);
-            }
+                Host = "smtp.gmail.com",
+                Port = 587,
+                EnableSsl = true,
+                Credentials = new NetworkCredential("chiraglabha05@gmail.com", "xmbmrinlzcavyppt")
+            };
+
+            var message = new MailMessage
+            {
+                From = new MailAddress("chiraglabha05@gmail.com"),
+                Subject = subject,
+                Body = body,
+                IsBodyHtml = true
+            };
+            message.To.Add(recipient);
+
+            // Send the email
+            smtpClient.Send(message);
         }
 
         private bool TaskExists(int id)
