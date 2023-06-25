@@ -53,7 +53,7 @@ namespace TaskManagement.Controllers
            // return Ok(newUser);
         }
 
-        [HttpGet("login")]
+        [HttpGet]
         public IActionResult Login() {
             return View();
         }
