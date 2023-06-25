@@ -49,7 +49,8 @@ namespace TaskManagement.Controllers
             await _context.Users.AddAsync(newUser);
             await _context.SaveChangesAsync();
 
-            return RedirectToAction("Login");
+            //return RedirectToAction("Login");
+            return Redirect("/");
            // return Ok(newUser);
         }
 
