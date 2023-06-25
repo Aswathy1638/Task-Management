@@ -6,9 +6,9 @@ using TaskManagement.Models;
 
 namespace TaskManagement.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class UserController : ControllerBase
+    //[Route("api/[controller]")]
+    //[ApiController]
+    public class UserController : Controller
     {
         private readonly TaskContext _context;
 
@@ -17,9 +17,15 @@ namespace TaskManagement.Controllers
             _context = context;
         }
 
+        [HttpGet("register")]
+        public IActionResult Register()
+        {
+            // Render the registration form view
+            return View();
+        }
 
-        [HttpPost]
-        public async Task<IActionResult> AddUser(User user)
+        [HttpPost("register")]
+        public async Task<IActionResult> Register(User user)
         {
             if (await _context.Users.AnyAsync(u => u.Email == user.Email))
             {
@@ -42,11 +48,17 @@ namespace TaskManagement.Controllers
             await _context.Users.AddAsync(newUser);
             await _context.SaveChangesAsync();
 
-            return Ok(newUser);
+            return RedirectToAction("Login");
+           // return Ok(newUser);
+        }
+
+        [HttpGet("login")]
+        public IActionResult Login() {
+            return View();
         }
 
         [HttpPost("login")]
-        public async Task<IActionResult> Authenticate(User user)
+        public async Task<IActionResult> Login(User user)
         {
             var finduser = await _context.Users.FirstOrDefaultAsync(u => u.Email == user.Email);
 
@@ -62,7 +74,7 @@ namespace TaskManagement.Controllers
             }
 
 
-            return Ok(new { Message = "Authentication successful" });
+            return RedirectToAction("Index","Task");
         }
     }
 }

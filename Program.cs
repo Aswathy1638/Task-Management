@@ -47,6 +47,10 @@ namespace TaskManagement
             app.MapControllerRoute(
                 name: "default",
                 pattern: "{controller=Task}/{action=Index}/{id?}");
+            app.MapControllerRoute(
+    name: "register",
+    pattern: "register",
+    defaults: new { controller = "User", action = "Register" });
 
 
             app.Run();

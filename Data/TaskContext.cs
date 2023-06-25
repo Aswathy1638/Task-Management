@@ -15,6 +15,7 @@ namespace TaskManagement.Data
         {
 
             modelBuilder.Entity<TaskManagement.Models.TaskModel>().ToTable("Tasks");
+            modelBuilder.Entity<User>().ToTable("Users");
 
         }
     }
