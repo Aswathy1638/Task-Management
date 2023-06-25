@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace TaskManagement.Models
 {
@@ -12,23 +13,9 @@ namespace TaskManagement.Models
         public DateTime DueDate { get; set; }
         public string Priority { get; set; }
 
-        //public string AssignedUserId { get; set; }
-        //public User AssignedUser { get; set; }
+        public int UserId { get; set; }  // Foreign key
 
-        //public ICollection<Comment> Comments { get; set; }
+        [ForeignKey("UserId")]  // Specify the foreign key relationship
+        public User User { get; set; }  // Navigation property
     }
-
-    //public enum TaskStatus
-    //{
-    //    Todo,
-    //    InProgress,
-    //    Done
-    //}
-
-    //public enum TaskPriority
-    //{
-    //    High,
-    //    Medium,
-    //    Low
-    //}
 }

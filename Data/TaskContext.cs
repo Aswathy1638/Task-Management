@@ -14,6 +14,13 @@ namespace TaskManagement.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
 
+            modelBuilder.Entity<TaskModel>()
+               .HasOne<User>(t => t.User)
+               .WithMany(u => u.Tasks)
+               .HasForeignKey(t => t.UserId)
+               .OnDelete(DeleteBehavior.Restrict);
+
+
             modelBuilder.Entity<TaskManagement.Models.TaskModel>().ToTable("Tasks");
             modelBuilder.Entity<User>().ToTable("Users");
 
