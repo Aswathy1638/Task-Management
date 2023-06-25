@@ -1,11 +1,11 @@
 ﻿@model IEnumerable<TaskManagement.Models.TaskModel>;
 @using TaskManagement.Models
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Tasks";
 }
-<h1>Index</h1>
+<h1>Task List</h1>
 <p>
-    <a asp-page="/Create">Create New</a>
+    <a asp-controller="Task" asp-action="Create">Create New</a>
 </p>
 <table class="table">
     <thead>
