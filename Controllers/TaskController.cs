@@ -76,14 +76,13 @@ namespace TaskManagement.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(TaskModel task){
           
-                if (ModelState.IsValid)
-                {
+                
 
                    // task.AssignedUser = await _taskContext.Users.FindAsync(task.AssignedUserId);
                     await _taskContext.Tasks.AddAsync(task);
                     await _taskContext.SaveChangesAsync();
                     return RedirectToAction(nameof(Index));
-                }
+                
 
             
 
