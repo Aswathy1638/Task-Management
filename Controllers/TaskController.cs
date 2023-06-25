@@ -1,12 +1,13 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using TaskManagement.Data;
 using TaskManagement.Models;
 
 namespace TaskManagement.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
+    //[Route("[controller]")]
+    //[ApiController]
     public class TaskController : Controller
     {
         private readonly TaskContext _taskContext;
@@ -14,12 +15,7 @@ namespace TaskManagement.Controllers
         {
             _taskContext = taskContext;
         }
-        //GET : api/task
-        //[HttpGet]
-        //public async Task<String> GetString() {
-        //    return "hello world";
-        //}
-        // GET: api/task
+        // GET: /task
         [HttpGet]
         public async Task<ActionResult> Index()
         {
@@ -27,63 +23,23 @@ namespace TaskManagement.Controllers
             return View(tasks);
             //return Ok(tasks);
         }
-        // GET: api/task/{id}
-        [HttpGet("{id}")]
-        public async Task<ActionResult<TaskModel>> GetTask(int id)
+        [HttpGet]
+        // GET: Task/Create
+        public IActionResult Create()
         {
-            var task = await _taskContext.Tasks.FindAsync(id);
-            if (task == null)
-            {
-                return NotFound();
-            }
-            return Ok(task);
+            return View();
         }
-        // POST: api/task
+
         [HttpPost]
-        public async Task<ActionResult<TaskModel>> CreateTask(TaskModel task)
-        {
-           await _taskContext.Tasks.AddAsync(task);
-            await _taskContext.SaveChangesAsync();
-            return CreatedAtAction(nameof(GetTask), new { id = task.Id }, task);
-        }
-        // PUT: api/task/{id}
-        [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateTask(int id, TaskModel task)
-        {
-            if (id != task.Id)
+        public async Task<IActionResult> Create(TaskModel task){
+            if (ModelState.IsValid)
             {
-                return BadRequest();
-            }
-            _taskContext.Entry(task).State = EntityState.Modified;
-            try
-            {
+                await _taskContext.Tasks.AddAsync(task);
                 await _taskContext.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
             }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!TaskExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-            return NoContent();
-        }
-        // DELETE: api/task/{id}
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteTask(int id)
-        {
-            var task = await _taskContext.Tasks.FindAsync(id);
-            if (task == null)
-            {
-                return NotFound();
-            }
-            _taskContext.Tasks.Remove(task);
-            await _taskContext.SaveChangesAsync();
-            return NoContent();
+
+            return View(task);
         }
         private bool TaskExists(int id)
         {
