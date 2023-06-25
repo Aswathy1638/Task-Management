@@ -30,6 +30,7 @@ namespace TaskManagement.Controllers
             return View();
         }
 
+        //POST: Task/Create
         [HttpPost]
         public async Task<IActionResult> Create(TaskModel task){
             if (ModelState.IsValid)
@@ -41,6 +42,19 @@ namespace TaskManagement.Controllers
 
             return View(task);
         }
+
+        //GET: Task/Edit/{id}
+        [HttpGet("{id}")]
+        public async Task<ActionResult> Edit(int id) {
+            var task = await _taskContext.Tasks.FindAsync(id);
+            if (task == null)
+            {
+                return NotFound();
+            }
+
+            return View(task);
+        }
+
         private bool TaskExists(int id)
         {
             return _taskContext.Tasks.Any(t => t.Id == id);
